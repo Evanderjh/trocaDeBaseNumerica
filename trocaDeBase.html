@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troca de Base numérica</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <script>
+        function executar() {
+            let numero = parseFloat(document.getElementById('numero').value); //Peguei o input do número
+            let base = parseFloat(document.getElementById('base').value); //Peguei o input da base
+            let numeral = []; //Criei o array, que irá armazenar a sequência numeral
+            let numeralOrganizado = []; //Essa variável vai receber os elementos na ordem correta
+
+            let res = document.getElementById('res'); //Elemento que irá renderizar a resposta ao final
+
+            //Função que irá converter
+            function transformador(numero, base) {
+                let num = numero;
+                let resDivisao = numero / base;
+
+                if (base === 2) {
+                    if ((resDivisao % 1) != 0) {
+                        resDivisao = resDivisao.toFixed(0);
+                        resDivisao--
+                    }
+                }
+
+                if (base > 2) {
+                    if ((resDivisao % 1) != 0) {
+                        resDivisao = Math.trunc(resDivisao);
+                    }
+                }
+
+                if (num == 1) {
+                    return numeral.push(('1'));
+                } else if (num <= 0) {
+                    return numeral.push(('0'));
+                } else {
+                    numeral.push((numero % base).toFixed(0));
+                    transformador(resDivisao, base);
+                }
+            }
+
+            //Chamada da função
+            transformador(numero, base);
+            
+            //For para reorganizar o array;
+            for (let i = numeral.length; i > 0; i--) {
+                numeralOrganizado.push(numeral[(i-1)]);
+            }
+
+            //Alguns teste, dão uma coluna de Zero a mais, por isso fiz esse if, para retirá-lo quando o primeiro valor for 0
+            if (numeralOrganizado[0] == 0){
+                numeralOrganizado.splice(0,1);
+            }
+
+            //For para renderizar a resposta
+            res.innerHTML = `Resultado: `;
+            for (let i = 0; i < numeralOrganizado.length; i++) {
+                res.innerHTML += ` ${numeralOrganizado[(i)]}`;
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mt-5">Troca de Base númerica</h1>
+        <hr />
+        <form>
+            <div class="py-3">
+                <label for="numero">Digite um numeral com base 10: </label>
+                <input type="number" class="form-control mb-4" id="numero" placeholder="" />
+                <label for="base">Digite a base desejável, entre 2 a 9: </label>
+                <input type="number" class="form-control" id="base" />
+            </div>
+            <input type="button" value="Executar" class="btn btn-success btn-lg w-100 my-3" onclick="executar()">
+        </form>
+        <div>
+            <h2 id="res" class="mt-3">Aguardando dados...</h2>
+        </div>
+    </div>
+</body>
+
+</html>
